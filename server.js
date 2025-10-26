@@ -27,9 +27,7 @@ async function startWhatsAppClient() {
             }),
             puppeteer: {
                 headless: true,
-                executablePath: process.platform === 'win32' 
-                    ? undefined  
-                    : '/usr/bin/google-chrome-stable',
+                executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium',
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
