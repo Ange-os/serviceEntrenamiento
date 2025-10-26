@@ -1,8 +1,15 @@
-version: '3'
+version: '3.8'
 services:
-  app:
+  whatsapp-linker:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - "3000:3000"
+    environment:
+      - SERVER_URL=https://whapp.xia.ar/
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whatsapp.rule=Host(`tu-subdominio.midominio.com`)"
+      - "traefik.http.services.whatsapp.loadbalancer.server.port=3000"
