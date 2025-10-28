@@ -50,8 +50,8 @@ app.post('/login', async (req, res) => {
     if (user === ADMIN_USER && pass === ADMIN_PASS) {
         req.session.loggedIn = true;
         console.log('✅ Login correcto. Iniciando cliente de WhatsApp...');
-        try {
-            await startWhatsAppClient(); // 🔥 se ejecuta solo si login OK
+        try { 
+            req.session.loggedIn = true;
             res.redirect('/');
         } catch (err) {
             console.error('❌ Error al iniciar WhatsApp:', err);
