@@ -1,13 +1,74 @@
 const express = require('express');
+const session = require('express-session');
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const qrcodeLib = require('qrcode');
+const bodyParser = require('body-parser');
+
+require('dotenv').config();
 
 const app = express();
 const PORT = 3000;
 
-app.use(express.json());
 
+app.use(session({
+    secret:  process.env.SESSION_SECRET, // Cambiar por algo único
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// === Credenciales desde entorno ===
+const ADMIN_USER = process.env.ADMIN_USER 
+const ADMIN_PASS = process.env.ADMIN_PASS 
+
+function isAuthenticated(req, res, next) {
+    if (req.session.loggedIn) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+}
+
+// === Formulario simple de login ===
+app.get('/login', (req, res) => {
+    res.send(`
+        <form method="POST" action="/login" style="max-width:300px;margin:auto;margin-top:100px;text-align:center;">
+            <h2>🔒 Login</h2>
+            <input name="user" placeholder="Usuario" required style="margin:5px;padding:8px;width:100%;" />
+            <input name="pass" type="password" placeholder="Contraseña" required style="margin:5px;padding:8px;width:100%;" />
+            <button type="submit" style="padding:8px 16px;">Entrar</button>
+        </form>
+    `);
+});
+
+// === Validación de login ===
+app.post('/login', async (req, res) => {
+    const { user, pass } = req.body;
+
+    if (user === ADMIN_USER && pass === ADMIN_PASS) {
+        req.session.loggedIn = true;
+        console.log('✅ Login correcto. Iniciando cliente de WhatsApp...');
+        try {
+            await startWhatsAppClient(); // 🔥 se ejecuta solo si login OK
+            res.redirect('/');
+        } catch (err) {
+            console.error('❌ Error al iniciar WhatsApp:', err);
+            res.status(500).send('Error al iniciar WhatsApp');
+        }
+    } else {
+        res.status(401).send('<h3>❌ Credenciales incorrectas</h3><a href="/login">Volver</a>');
+    }
+});
+
+// === Logout ===
+app.get('/logout', (req, res) => {
+    req.session.destroy(() => res.redirect('/login'));
+});
+
+// === Proteger todas las rutas ===
+app.use(isAuthenticated);
 // Inicializar cliente de WhatsApp
 
 const path = require('path');

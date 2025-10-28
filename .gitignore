@@ -8,3 +8,5 @@ node_modules/
 # Ignorar caché de WhatsApp Web
 .wwebjs_cache/
 .wwebjs_auth/
+
+.env
