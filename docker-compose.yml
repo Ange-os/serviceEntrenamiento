@@ -16,5 +16,5 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whatsapp.rule=Host(`tu-subdominio.midominio.com`)"
+      - "traefik.http.routers.whatsapp.rule=Host(`whapp.xia.ar`)"
       - "traefik.http.services.whatsapp.loadbalancer.server.port=3000"
