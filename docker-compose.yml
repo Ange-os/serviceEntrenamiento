@@ -8,6 +8,7 @@ services:
       - "3000:3000"
     environment:
       - SERVER_URL=https://whapp.xia.ar/
+      - SESSION_SECRET=eqieni12334ntwENE
       - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
       - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
       - NODE_ENV=production
