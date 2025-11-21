@@ -11,6 +11,8 @@ services:
       - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
       - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
       - NODE_ENV=production
+      - ADMIN_USER=whapp-superuser
+      - ADMIN_PASS=dnasd344mrewornDDD
     restart: always
     labels:
       - "traefik.enable=true"
