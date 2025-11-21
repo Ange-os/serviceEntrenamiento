@@ -371,7 +371,7 @@ app.get('/export/clean-for-training', checkReady, async (req, res) => {
 // Trigger n8n
 app.post('/trigger-n8n', async (req, res) => {
     try {
-        const N8N_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL || "https://n8n.xia.ar/webhook-test/6b90987a-8166-4e89-8e16-441db8db9ba8";
+        const N8N_WEBHOOK_URL =  "https://n8n.xia.ar/webhook-test/6b90987a-8166-4e89-8e16-441db8db9ba8";
         const response = await fetch(N8N_WEBHOOK_URL, { method: 'POST' });
         
         if (!response.ok) throw new Error(`n8n devolvió ${response.status}`);
